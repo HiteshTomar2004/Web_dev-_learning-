@@ -25,8 +25,8 @@ products.forEach((product) =>{
             </div>
 
             <div class="product-quantity-container">
-                <select>
-                <option selected value="1">1</option>
+                <select class="js-quantity-selector-${product.id}">
+                <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
@@ -60,20 +60,24 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 document.querySelectorAll('.js-add-to-cart')
            .forEach((button)=>{
             button.addEventListener('click',()=>{
-                const productId = button.dataset.productId;//converted from kebab case to camelCase
+                const{productId} = button.dataset;//const productId = button.dataset.productId;//converted from kebab-case to camelCase product-id to productId
                 let matchingItem;
                 cart.forEach((productsInCart)=>{
                     if(productId === productsInCart.productId){
                         matchingItem = productsInCart;
                     }
                 });
+                
+                const quantitySelected = document.querySelector(`.js-quantity-selector-${productId}`).value;//same convert to camel from kebab
+                let quantity = Number(quantitySelected);
+                
                 if(matchingItem){
-                    matchingItem.quantity += 1;
+                    matchingItem.quantity += quantity;
                 }
                 else{
                     cart.push({
-                        productId: productId,
-                        quantity: 1
+                        productId,
+                        quantity
                     });
                 }
                 totalQuantityCalculator();
