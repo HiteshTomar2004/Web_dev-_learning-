@@ -1,4 +1,19 @@
-const products = [
+[
+  {
+    "id": "a8322df-643b-4v45-9ghz-e1j38eb19gfj",
+    "image": "images/products/backpack.jpg",
+    "name": "Backpack 25L Daily Use",
+    "rating": {
+      "stars": 3.5,
+      "count": 123
+    },
+    "priceCents": 3199,
+    "keywords": [
+      "socks",
+      "sports",
+      "apparel"
+    ]
+  },
   {
     "id": "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     "image": "images/products/athletic-cotton-socks-6-pairs.jpg",
