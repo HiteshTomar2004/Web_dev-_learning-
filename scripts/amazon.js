@@ -1,8 +1,6 @@
-
-
 let productsHTML = ``;
 
-product.forEach((product) =>{
+products.forEach((product) =>{
     productsHTML = productsHTML + `
         <div class="product-container">
             <div class="product-image-container">
