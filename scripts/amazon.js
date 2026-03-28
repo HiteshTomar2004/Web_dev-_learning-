@@ -41,7 +41,8 @@ products.forEach((product) =>{
 
             <div class="product-spacer"></div>
 
-            <div class="added-to-cart">
+            <div class="added-to-cart js-added-display"
+                data-added-display-id="${product.id}">
                 <img src="images/icons/checkmark.png">
                 Added
             </div>
@@ -56,6 +57,8 @@ products.forEach((product) =>{
 });
 
 document.querySelector('.js-products-grid').innerHTML = productsHTML;
+
+const addedMessageTimeouts = {}; 
 
 document.querySelectorAll('.js-add-to-cart')
            .forEach((button)=>{
@@ -80,6 +83,22 @@ document.querySelectorAll('.js-add-to-cart')
                         quantity
                     });
                 }
-                totalQuantityCalculator();
+                totalQuantityCalculator(); 
+                addedMessageTimeouts[productId] = addedCheckmarkDisplay(productId,addedMessageTimeouts[productId]);
             })
            });
+
+function addedCheckmarkDisplay(productId,currentTimerId){
+    const addedElements = document.querySelector(`[data-added-display-id="${productId}"]`);
+
+    addedElements.classList.remove('js-added-opacity');//restart animation
+    if(currentTimerId){
+        clearTimeout(currentTimerId);
+    }
+    addedElements.classList.add('js-added-opacity');
+
+    const newTimerId = setTimeout(()=>{
+            addedElements.classList.remove('js-added-opacity');
+            },4000); 
+    return newTimerId;
+}
