@@ -76,5 +76,6 @@ document.querySelectorAll('.js-add-to-cart')
                         quantity: 1
                     });
                 }
+                totalQuantityCalculator();
             })
            });
