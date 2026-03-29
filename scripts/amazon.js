@@ -1,4 +1,4 @@
-import {cart,totalQuantityCalculator} from '../data/cart.js';
+import {cart, addToCart, totalQuantityCalculator} from '../data/cart.js';
 import { products } from '../data/products.js';
 let productsHTML = ``;
 
@@ -63,32 +63,16 @@ document.querySelector('.js-products-grid').innerHTML = productsHTML;
 const addedMessageTimeouts = {}; 
 
 document.querySelectorAll('.js-add-to-cart')
-           .forEach((button)=>{
-            button.addEventListener('click',()=>{
-                const{productId} = button.dataset;//const productId = button.dataset.productId;//converted from kebab-case to camelCase product-id to productId
-                let matchingItem;
-                cart.forEach((productsInCart)=>{
-                    if(productId === productsInCart.productId){
-                        matchingItem = productsInCart;
-                    }
-                });
-                
-                const quantitySelected = document.querySelector(`.js-quantity-selector-${productId}`).value;//same convert to camel from kebab
-                let quantity = Number(quantitySelected);
-                
-                if(matchingItem){
-                    matchingItem.quantity += quantity;
-                }
-                else{
-                    cart.push({
-                        productId,
-                        quantity
-                    });
-                }
-                totalQuantityCalculator(); 
-                addedMessageTimeouts[productId] = addedCheckmarkDisplay(productId,addedMessageTimeouts[productId]);
-            })
-           });
+    .forEach((button)=>{
+        button.addEventListener('click',()=>{
+            const{productId} = button.dataset;//const productId = button.dataset.productId;//converted from kebab-case to camelCase product-id to productId
+            
+            addToCart(productId);//from cart.js
+            totalQuantityCalculator(); //from cart.js
+            addedMessageTimeouts[productId] = addedCheckmarkDisplay(productId,addedMessageTimeouts[productId]);
+        })
+    });
+
 
 function addedCheckmarkDisplay(productId,currentTimerId){
     const addedElements = document.querySelector(`[data-added-display-id="${productId}"]`);
