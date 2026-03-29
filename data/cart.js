@@ -1,7 +1,7 @@
-const cart = [];
+export const cart = [];
 let totalQuantity = 0;
 
-function totalQuantityCalculator(){
+export function totalQuantityCalculator(){
     totalQuantity = 0;
     cart.forEach((item)=>{
         totalQuantity += item.quantity;

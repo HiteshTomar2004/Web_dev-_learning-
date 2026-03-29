@@ -1,3 +1,5 @@
+import {cart,totalQuantityCalculator} from '../data/cart.js';
+
 let productsHTML = ``;
 
 products.forEach((product) =>{
