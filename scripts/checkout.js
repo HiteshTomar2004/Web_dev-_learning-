@@ -1,4 +1,4 @@
-import {cart ,deleteFromCart,totalQuantityCalculator} from '../data/cart.js';   // .. represents outside current folder
+import {cart ,deleteFromCart,totalQuantityCalculator, updateQuantity} from '../data/cart.js';   // .. represents outside current folder
 import { products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js'; // . represents inside current folder
 
@@ -33,10 +33,21 @@ cart.forEach((cartItem) =>{
             </div>
             <div class="product-quantity">
                 <span>
-                Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+                Quantity: 
+                    <span class="quantity-label"
+                        data-quanity-label-id="${matchingProduct.id}">
+                    ${cartItem.quantity}
+                    </span>
                 </span>
-                <span class="update-quantity-link link-primary">
+                <span class="update-quantity-link link-primary js-update-quantity-link"
+                    data-update-link-id="${matchingProduct.id}">
                 Update
+                </span>
+                <input class="quantity-input js-quantity-input" type="number" 
+                    data-quantity-input-id="${matchingProduct.id}">
+                <span class="save-quantity-link link-primary js-save-quantity"
+                    data-save-id="${matchingProduct.id}">
+                Save
                 </span>
                 <span class="delete-quantity-link link-primary js-delete-quantity-link"
                     data-delete-id="${matchingProduct.id}">
@@ -99,9 +110,56 @@ document.querySelectorAll('.js-delete-quantity-link')
     .forEach((deleteButton) =>{
         deleteButton.addEventListener('click',()=>{
             const productId = deleteButton.dataset.deleteId;
-            deleteFromCart(productId);// from cart.js
-            const deleteElement = document.querySelector(`.js-item-container-${productId}`);
-            deleteElement.remove();
-            totalQuantityCalculator();
+            deleteQuantity(productId);
         });
     });
+
+document.querySelectorAll('.js-update-quantity-link')
+    .forEach((updateButton) =>{
+        updateButton.addEventListener('click',()=>{
+            const productId = updateButton.dataset.updateLinkId;
+            const updateElement = document.querySelector(`.js-item-container-${productId}`);
+            updateElement.classList.add('is-editing-quantity');
+        });
+    });
+document.querySelectorAll('.js-save-quantity')
+    .forEach((saveButton) =>{
+        saveButton.addEventListener('click',()=>{
+            const productId = saveButton.dataset.saveId;
+            saveQuantity(productId);
+        });
+    });
+document.querySelectorAll('.js-quantity-input')
+    .forEach((inputElement)=>{
+        inputElement.addEventListener('keydown',(event)=>{ 
+            if(event.key === 'Enter'){ 
+                const productId = inputElement.dataset.quantityInputId; 
+                saveQuantity(productId); 
+            } 
+        });
+    });
+
+function deleteQuantity(productId){
+    deleteFromCart(productId);// from cart.js
+            const deleteElement = document.querySelector(`.js-item-container-${productId}`);//choosing which element to delete from HTML code
+            deleteElement.remove();
+            totalQuantityCalculator();
+}
+
+function saveQuantity(productId){
+    const saveElement = document.querySelector(`.js-item-container-${productId}`);
+            saveElement.classList.remove('is-editing-quantity');
+            
+            const updatedQuantity = Number(document.querySelector(`[data-quantity-input-id="${productId}"]`).value);
+            
+            if(updatedQuantity <= 1000 && updatedQuantity >0){
+                document.querySelector(`[data-quanity-label-id="${productId}"]`).innerHTML = updatedQuantity;
+                updateQuantity(productId,updatedQuantity);
+            }
+            else if(updatedQuantity === 0){
+                deleteQuantity(productId);
+            }
+            else{
+                document.querySelector(`[data-quanity-label-id="${productId}"]`).innerHTML = '<div style="color: red;">Quantity cannot be less than 0 or greater than 1000</div>';
+            }
+}

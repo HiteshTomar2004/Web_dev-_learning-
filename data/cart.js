@@ -65,3 +65,14 @@ export function deleteFromCart(productId){
     cart = newCart;
     saveToLocalStorage();
 }
+
+export function updateQuantity(productId,newQuantity){
+    let matchingItem;
+    cart.forEach((matchingItem)=>{
+        if(productId === matchingItem.productId){
+            matchingItem.quantity = newQuantity;
+        }
+        totalQuantityCalculator();
+        saveToLocalStorage();
+    });
+}
