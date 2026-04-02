@@ -1,6 +1,8 @@
-import {cart ,deleteFromCart} from '../data/cart.js';   // .. represents outside current folder
+import {cart ,deleteFromCart,totalQuantityCalculator} from '../data/cart.js';   // .. represents outside current folder
 import { products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js'; // . represents inside current folder
+
+totalQuantityCalculator();
 
 let cartItemHTML = ``;
 
@@ -99,6 +101,7 @@ document.querySelectorAll('.js-delete-quantity-link')
             const productId = deleteButton.dataset.deleteId;
             deleteFromCart(productId);// from cart.js
             const deleteElement = document.querySelector(`.js-item-container-${productId}`);
-            deleteElement.remove(); 
+            deleteElement.remove();
+            totalQuantityCalculator();
         });
     });

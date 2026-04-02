@@ -43,7 +43,14 @@ export function totalQuantityCalculator(){
     cart.forEach((cartItem)=>{
         totalQuantity += cartItem.quantity;
     });
-    document.querySelector('.js-cart-icon-update').innerHTML = totalQuantity;
+    const cartIconHeader = document.querySelector('.js-cart-icon-update');
+    if(cartIconHeader){
+        cartIconHeader.innerHTML = totalQuantity;
+    }
+    const checkoutHeaderElement = document.querySelector('.js-checkout-update');
+    if(checkoutHeaderElement){
+        checkoutHeaderElement.innerHTML = String(totalQuantity + ' items');
+    }
 }
 
 
@@ -56,6 +63,5 @@ export function deleteFromCart(productId){
         }
     });
     cart = newCart;
-
     saveToLocalStorage();
 }
