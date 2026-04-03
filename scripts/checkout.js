@@ -194,7 +194,12 @@ function renderCheckout(){
             radioInputElement.addEventListener('click',()=>{
                 const {matchingProductId, deliveryOptionId} = radioInputElement.dataset;
                 updateDeliveryOptionsInCart(matchingProductId,deliveryOptionId);
-                renderCheckout();
+                renderCheckout();//Update HTML and Regenerate all Data = MVC (model-view-control)
             })
         });
-}
+    }
+        /*MVC - many frameworks based on it
+            split code into 3 parts 
+            1.Model = Saves and manages the data eg Cart 
+            2.View = takes data and displays it on page eg HTML generators
+            3.Control = Runs some code when we interact with page eg Event listeners*/
