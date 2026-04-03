@@ -4,13 +4,9 @@ import formatCurrency from '../utils/money.js'; //default export from money.js
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';//only works for esm libraries otherwise we have to use script tags
 import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js';
+import { renderPaymentSummary } from './paymentSummary.js';
 
-//hello();
 totalQuantityCalculator();
-
-const today = dayjs();//from external library module day.js()
-const deliveryDate = today.add(7, 'days');//(number,strings in what to add)
-console.log(deliveryDate.format('dddd, MMMM D'));
 
 export function renderOrderSummary(){
     let cartItemHTML = ``;
@@ -123,6 +119,8 @@ export function renderOrderSummary(){
                 const deleteElement = document.querySelector(`.js-item-container-${productId}`);//choosing which element to delete from HTML code
                 deleteElement.remove();
                 totalQuantityCalculator();
+
+                renderPaymentSummary();
     }
 
     function saveQuantity(productId){
@@ -134,6 +132,8 @@ export function renderOrderSummary(){
                 if(updatedQuantity <= 1000 && updatedQuantity >0){
                     document.querySelector(`[data-quanity-label-id="${productId}"]`).innerHTML = updatedQuantity;
                     updateQuantity(productId,updatedQuantity);
+
+                    renderPaymentSummary();
                 }
                 else if(updatedQuantity === 0){
                     deleteQuantity(productId);
@@ -186,6 +186,7 @@ export function renderOrderSummary(){
                 const {matchingProductId, deliveryOptionId} = radioInputElement.dataset;
                 updateDeliveryOptionsInCart(matchingProductId,deliveryOptionId);
                 renderOrderSummary();//Update HTML and Regenerate all Data = MVC (model-view-control)
+                renderPaymentSummary();
             })
         });
     }
@@ -193,4 +194,7 @@ export function renderOrderSummary(){
             split code into 3 parts 
             1.Model = Saves and manages the data eg Cart 
             2.View = takes data and displays it on page eg HTML generators
-            3.Control = Runs some code when we interact with page eg Event listeners*/
+            3.Control = Runs some code when we interact with page eg Event listeners
+            
+            Update the data -> Regenerate the HTML -> Make it interactive
+            */
