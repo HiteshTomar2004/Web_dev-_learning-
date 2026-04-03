@@ -1,16 +1,15 @@
-import {cart ,deleteFromCart,totalQuantityCalculator, updateQuantity} from '../data/cart.js';   // .. represents outside current folder
+import {cart ,deleteFromCart,totalQuantityCalculator, updateQuantity, updateDeliveryOptionsInCart} from '../data/cart.js';   // .. represents outside current folder
 import { products} from '../data/products.js';//named export from products.js
 import formatCurrency from './utils/money.js'; // . represents inside current folder //default export from money.js
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';//only works for esm libraries otherwise we have to use script tags
 import {deliveryOptions} from '../data/deliveryOptions.js';
 
-hello();
+//hello();
 totalQuantityCalculator();
 
 const today = dayjs();//from external library module day.js()
 const deliveryDate = today.add(7, 'days');//(number,strings in what to add)
-console.log(deliveryDate.format('dddd, MMMM D'));
 
 
 let cartItemHTML = ``;
@@ -171,7 +170,9 @@ function deliveryOptionsHtml(matchingProduct, cartItem){
             `<div class="delivery-option">
                 <input type="radio"
                 ${isChecked ? 'checked' : ''}
-                class="delivery-option-input"
+                class="delivery-option-input js-delivery-option"
+                data-matching-product-id="${matchingProduct.id}"
+                data-delivery-option-id="${deliveryOption.id}"
                 name="delivery-option-${matchingProduct.id}">
                 <div>
                 <div class="delivery-option-date">
@@ -182,7 +183,15 @@ function deliveryOptionsHtml(matchingProduct, cartItem){
                 </div>
                 </div>
             </div>`;
-    });
+    });//name element groups radio buttons together
     
     return deliveryHtml;
 }
+
+document.querySelectorAll('.js-delivery-option')
+    .forEach((radioInputElement)=>{
+        radioInputElement.addEventListener('click',()=>{
+            const {matchingProductId, deliveryOptionId} = radioInputElement.dataset;
+            updateDeliveryOptionsInCart(matchingProductId,deliveryOptionId);
+        })
+    });
