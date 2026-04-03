@@ -54,6 +54,7 @@ export function totalQuantityCalculator(){
     if(checkoutHeaderElement){
         checkoutHeaderElement.innerHTML = String(totalQuantity + ' items');
     }
+    return totalQuantity;
 }
 
 

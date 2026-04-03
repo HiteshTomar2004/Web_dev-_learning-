@@ -1,9 +1,9 @@
 import {cart ,deleteFromCart,totalQuantityCalculator, updateQuantity, updateDeliveryOptionsInCart} from '../../data/cart.js';   // .. represents outside current folder // . represents inside current folder
-import { products} from '../../data/products.js';//named export from products.js
+import { getProducts} from '../../data/products.js';//named export from products.js
 import formatCurrency from '../utils/money.js'; //default export from money.js
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';//only works for esm libraries otherwise we have to use script tags
-import {deliveryOptions} from '../../data/deliveryOptions.js';
+import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js';
 
 //hello();
 totalQuantityCalculator();
@@ -12,25 +12,16 @@ const today = dayjs();//from external library module day.js()
 const deliveryDate = today.add(7, 'days');//(number,strings in what to add)
 console.log(deliveryDate.format('dddd, MMMM D'));
 
-export function renderCheckout(){
+export function renderOrderSummary(){
     let cartItemHTML = ``;
 
     cart.forEach((cartItem) =>{
         const productId = cartItem.productId;
-        let matchingProduct;
-        products.forEach((product)=>{
-            if(product.id === productId){
-                matchingProduct = product;
-            }
-        })
+        const matchingProduct = getProducts(productId);
 
         const deliveryOptionsId = cartItem.deliveryOptionsId;
-        let deliveryOption;
-        deliveryOptions.forEach((option)=>{
-            if(option.id === deliveryOptionsId){
-                deliveryOption = option;
-            }
-        });
+        let deliveryOption = getDeliveryOption(deliveryOptionsId);
+        
 
         const today = dayjs();
         const deliveryDate = today.add(
@@ -194,7 +185,7 @@ export function renderCheckout(){
             radioInputElement.addEventListener('click',()=>{
                 const {matchingProductId, deliveryOptionId} = radioInputElement.dataset;
                 updateDeliveryOptionsInCart(matchingProductId,deliveryOptionId);
-                renderCheckout();//Update HTML and Regenerate all Data = MVC (model-view-control)
+                renderOrderSummary();//Update HTML and Regenerate all Data = MVC (model-view-control)
             })
         });
     }
