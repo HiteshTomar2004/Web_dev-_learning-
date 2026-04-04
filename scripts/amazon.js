@@ -71,7 +71,10 @@ document.querySelectorAll('.js-add-to-cart')
         button.addEventListener('click',()=>{
             const{productId} = button.dataset;//const productId = button.dataset.productId;//converted from kebab-case to camelCase product-id to productId
             
-            addToCart(productId);//from cart.js
+            const quantitySelected = document.querySelector(`.js-quantity-selector-${productId}`).value;//same convert to camel from kebab
+            let quantity = Number(quantitySelected);
+
+            addToCart(productId,quantity);//from cart.js
             totalQuantityCalculator(); //from cart.js
             addedMessageTimeouts[productId] = addedCheckmarkDisplay(productId,addedMessageTimeouts[productId]);
         })
