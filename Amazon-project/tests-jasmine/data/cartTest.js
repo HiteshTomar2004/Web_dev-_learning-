@@ -1,4 +1,4 @@
-import {addToCart ,cart, loadFromStorage, updateDeliveryOptionsInCart} from "../../data/cart.js";
+import {addToCart ,cart, loadFromStorage, updateDeliveryOptionsInCart} from "../../Amazon-project/data/cart.js";
 
 describe('test suite: addToCart', ()=>{
     
@@ -12,7 +12,7 @@ describe('test suite: addToCart', ()=>{
             }]);
         });
         loadFromStorage();
-        
+
         console.log(localStorage.getItem('cart'));
         addToCart('e43638ce-6aa0-4b85-b27f-e1d07eb678c6',1);
         expect(cart.length).toEqual(1);
