@@ -1,3 +1,6 @@
+import formatCurrency from "../scripts/utils/money.js";
+
+
 export function getProducts(productId){
   let matchingItem;
       products.forEach((product)=>{
@@ -8,6 +11,53 @@ export function getProducts(productId){
   return matchingItem;
 }
 
+
+class Product{
+  id;
+  image;
+  name;
+  rating;
+  priceCents;
+
+  constructor(productDetails){
+    this.id = productDetails.id;
+    this.image = productDetails.image;
+    this.name = productDetails.name;
+    this.rating = productDetails.rating;
+    this.priceCents = productDetails.priceCents;
+  }
+
+  getStarsUrl(){
+    return `images/ratings/rating-${this.rating.stars*10}.png`; 
+  }
+
+  getPrice(){
+    return `$${formatCurrency(this.priceCents)}`;
+  }
+}
+
+
+/*How to wrap an object in a class
+const product1 = new Product({
+    "id": "v434jg8-23sd-fjg7-8udh-4mci43jfg6kf",
+    "image": "images/products/umbrella.jpg",
+    "name": "Umbrella Polyester Green Durable",
+    "rating": {
+      "stars": 4.5,
+      "count": 52
+    },
+    "priceCents": 699,
+    "keywords": [
+      "umbrella",
+      "rain",
+      "gear"
+    ]
+  });
+console.log(product1);
+*/
+
+
+//map() to put products array elements in a class Product
 export const products = [
   {
     "id": "v434jg8-23sd-fjg7-8udh-4mci43jfg6kf",
@@ -697,4 +747,6 @@ export const products = [
       "mens"
     ]
   }
-];
+].map((productDetails)=>{
+    return new Product(productDetails);
+});
