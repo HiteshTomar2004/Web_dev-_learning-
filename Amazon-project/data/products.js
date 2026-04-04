@@ -97,7 +97,6 @@ const product1 = new Product({
 console.log(product1);
 */
 
-
 //map() to put products array elements in a class Product
 export const products = [
   {

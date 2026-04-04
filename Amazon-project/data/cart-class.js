@@ -117,3 +117,36 @@ console.log(cart);
 console.log(businessCart);
 
 console.log(businessCart instanceof Cart);
+
+/*
+inbuilt date class in JS
+const date = new Date();
+console.log(date);
+console.log(date.toLocaleTimeString());
+*/
+/*
+console.log(this);//undefined originally it was for window but now undefined
+const object2 = {
+  a: 2,
+  b: this.a//currently object hasnt been created yet so this is undefined 
+}
+  */
+/*
+function logThis(){
+  console.log(this);
+}
+logThis();
+logThis.call('hello');//.call allows to set first value to value of this
+//logThis.call('valueforthis',param1,param2)
+
+//arrow function do not change the value of this so "this" keeps the value that it had outside the function
+//inside a regular function "this" is undefined but we can change it using eg .call()
+
+this //value undefined, outside this "this"here<--------------------
+const obj3 = {                                                     |
+    method(){                                                      |
+        console.log(this) //also undefined ,this "this" points to _| 
+    }
+}
+
+*/
