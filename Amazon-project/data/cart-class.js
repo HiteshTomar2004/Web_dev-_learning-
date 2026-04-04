@@ -1,15 +1,15 @@
 class Cart {
     
-    cartItems;
-    localStorageKey;
+    cartItems;//public property
+    #localStorageKey;//private property only used inside class
 
     constructor(localStorageKey){//method name should be constructor and should not return anything
-        this.localStorageKey = localStorageKey;
-        this.loadFromStorage();
+        this.#localStorageKey = localStorageKey;
+        this.#loadFromStorage();
     }
 
-    loadFromStorage (){
-        this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey)) ||
+    #loadFromStorage (){//private method
+        this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey)) ||
         [{
             productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
             quantity: 2,
@@ -111,7 +111,7 @@ class Cart {
 const cart = new Cart('cart-oop');
 const businessCart = new Cart('cart-business');
 
-
+//cart.#localStorageKey = 'test';//not accessible outside class, also field = class
 
 console.log(cart);
 console.log(businessCart);
