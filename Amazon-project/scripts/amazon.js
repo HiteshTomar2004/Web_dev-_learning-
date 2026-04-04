@@ -45,6 +45,9 @@ products.forEach((product) =>{
                 </select>
             </div>
 
+            ${product.extraInfoHTML()/*PolyMorphism use a method without knowing the class
+                instead of if statements Class determines what the method does*/}
+ 
             <div class="product-spacer"></div>
 
             <div class="added-to-cart js-added-display"
