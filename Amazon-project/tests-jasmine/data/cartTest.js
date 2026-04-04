@@ -1,4 +1,4 @@
-import {addToCart ,cart, loadFromStorage, updateDeliveryOptionsInCart} from "../../Amazon-project/data/cart.js";
+import {addToCart ,cart, loadFromStorage} from "../../Amazon-project/data/cart.js";
 
 describe('test suite: addToCart', ()=>{
     

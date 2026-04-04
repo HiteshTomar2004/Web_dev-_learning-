@@ -1,5 +1,5 @@
-import {cart, addToCart, totalQuantityCalculator, saveToLocalStorage} from '../Amazon-project/data/cart.js';
-import { products } from '../Amazon-project/data/products.js';
+import { addToCart, totalQuantityCalculator } from '../data/cart.js';
+import { products } from '../data/products.js';
 import formatCurrency from './utils/money.js';
 
 totalQuantityCalculator();
