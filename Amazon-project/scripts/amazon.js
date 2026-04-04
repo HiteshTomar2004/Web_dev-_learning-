@@ -1,0 +1,97 @@
+import {cart, addToCart, totalQuantityCalculator, saveToLocalStorage} from '../Amazon-project/data/cart.js';
+import { products } from '../Amazon-project/data/products.js';
+import formatCurrency from './utils/money.js';
+
+totalQuantityCalculator();
+
+let productsHTML = ``;
+
+products.forEach((product) =>{
+    productsHTML = productsHTML + `
+        <div class="product-container">
+            <div class="product-image-container">
+                <img class="product-image"
+                src="${product.image}">
+            </div>
+
+            <div class="product-name limit-text-to-2-lines">
+                ${product.name}
+            </div>
+
+            <div class="product-rating-container">
+                <img class="product-rating-stars"
+                src="images/ratings/rating-${product.rating.stars*10}.png">
+                <div class="product-rating-count link-primary">
+                ${product.rating.count}
+                </div>
+            </div>
+
+            <div class="product-price">
+                $${formatCurrency(product.priceCents)}
+            </div>
+
+            <div class="product-quantity-container">
+                <select class="js-quantity-selector-${product.id}">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                </select>
+            </div>
+
+            <div class="product-spacer"></div>
+
+            <div class="added-to-cart js-added-display"
+                data-added-display-id="${product.id}">
+                <img src="images/icons/checkmark.png">
+                Added
+            </div>
+
+            <button class="add-to-cart-button button-primary
+            js-add-to-cart"
+            data-product-id="${product.id}">
+                Add to Cart
+            </button>
+            </div>
+    `;
+});
+
+document.querySelector('.js-products-grid').innerHTML = productsHTML;
+
+const addedMessageTimeouts = {}; 
+
+document.querySelectorAll('.js-add-to-cart')
+    .forEach((button)=>{
+        button.addEventListener('click',()=>{
+            const{productId} = button.dataset;//const productId = button.dataset.productId;//converted from kebab-case to camelCase product-id to productId
+            
+            const quantitySelected = document.querySelector(`.js-quantity-selector-${productId}`).value;//same convert to camel from kebab
+            let quantity = Number(quantitySelected);
+
+            addToCart(productId,quantity);//from cart.js
+            totalQuantityCalculator(); //from cart.js
+            addedMessageTimeouts[productId] = addedCheckmarkDisplay(productId,addedMessageTimeouts[productId]);
+        })
+    });
+
+
+function addedCheckmarkDisplay(productId,currentTimerId){
+    const addedElements = document.querySelector(`[data-added-display-id="${productId}"]`);
+
+    addedElements.classList.remove('js-added-opacity');//restart animation
+    if(currentTimerId){
+        clearTimeout(currentTimerId);
+    }
+    addedElements.classList.add('js-added-opacity');
+
+    const newTimerId = setTimeout(()=>{
+            addedElements.classList.remove('js-added-opacity');
+            },4000); 
+    return newTimerId;
+}
