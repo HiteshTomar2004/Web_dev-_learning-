@@ -147,6 +147,6 @@ const obj3 = {                                                     |
     method(){                                                      |
         console.log(this) //also undefined ,this "this" points to _| 
     }
-}
+}therefore inside a method
 
 */
