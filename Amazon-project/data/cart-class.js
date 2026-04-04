@@ -147,6 +147,5 @@ const obj3 = {                                                     |
     method(){                                                      |
         console.log(this) //also undefined ,this "this" points to _| 
     }
-}therefore inside a method
-
+}therefore inside a method we use this to point to outside objects
 */
