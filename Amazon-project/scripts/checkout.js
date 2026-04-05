@@ -58,13 +58,24 @@ loadProducts(()=>{
 
 async function loadPage(){ // async wraps the code in a promise
 
-    await loadProductsFetch(); //waits for loadProductsFetch to finish before next line and allows us to simplify code by not writing .then()
+    try{
+        //throw 'error1';//when it runs it skips rest of code directly to catch
+
+        await loadProductsFetch(); //waits for loadProductsFetch to finish before next line and allows us to simplify code by not writing .then()
     
-    const value = await new Promise((resolve)=>{
-        loadCart(()=>{
-            resolve('value2');  //'value2' is saved in a variable
+        const value = await new Promise((resolve,reject)=>{
+            //throw 'error2'; //skips to catch
+                loadCart(()=>{ //inside this function throw wont work as this functions runs in future
+                
+                //reject('error3'); use reject here
+                
+                resolve('value2');  //'value2' is saved in a variable
+            });
         });
-    });
+
+    } catch (error){
+        console.log('Unexpected error. Please try again later');
+    }
 
     renderOrderSummary();
     renderPaymentSummary();
@@ -136,4 +147,13 @@ function loadPage(){
     });
     });
 }
+
+TRY CATCH
+Use try catch in async await or synchronous code or .catch with objects
+whenever we get an error in try catch is skips the rest of the code and go directly to catch
+it is meant to handle unexpected error outside of control
+
+use throw to manually create errors in sync code
+throw does not work in future inside promises can work outside await 
+inside await async codes we use reject() a function which lets us create error in future
 */

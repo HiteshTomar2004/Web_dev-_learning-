@@ -115,6 +115,8 @@ export function loadProductsFetch(){//fetch makes an hhtp request fetch uses a P
       });
 
       console.log('load products check');
+  }).catch(()=>{// catch to catch errors in promises
+      console.log('Unexpected error. Please try again later');
   });
 
   return promise;
@@ -141,11 +143,16 @@ export function loadProducts(funct){
 
     funct();
   });
+  //error handling
+  xhr.addEventListener('error',(error)=>{
+    console.log('Unexpected error. Please try again later');
+  });
 
   xhr.open('GET','https://supersimplebackend.dev/products');
   xhr.send();
 
 }
+//loadProducts();
 
 
 /*HOW TO LOCALLY RUN A PRODUCTS ARRAY
