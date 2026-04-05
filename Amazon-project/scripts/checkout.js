@@ -8,9 +8,9 @@ import { loadCart } from "../data/cart.js";
 
 /*METHOD 1 Array of promises in Promise.all()
 The promise  is same as callback below
-*/
+
 Promise.all([//array of promises
-    loadProductsFetch(),
+    loadProductsFetch(),//returns a promise
     new Promise((resolve)=>{
         loadCart(()=>{
             resolve('value2');  //if nothing undefined is passed in an array of values
@@ -22,6 +22,8 @@ Promise.all([//array of promises
     renderOrderSummary();
     renderPaymentSummary();
 });
+*/
+
 
 /* METHOD 2 using promises and then every time
 
@@ -54,6 +56,22 @@ loadProducts(()=>{
 });
 */
 
+async function loadPage(){ // async wraps the code in a promise
+
+    await loadProductsFetch(); //waits for loadProductsFetch to finish before next line and allows us to simplify code by not writing .then()
+    
+    const value = await new Promise((resolve)=>{
+        loadCart(()=>{
+            resolve('value2');  //'value2' is saved in a variable
+        });
+    });
+
+    renderOrderSummary();
+    renderPaymentSummary();
+
+}
+loadPage();
+
 /*
 Promises-
 promise is a class
@@ -72,4 +90,50 @@ in .then we would want our async code loadCart to finish before we move onto nex
 this keeps code flattened therefore recommended to Use callbacks instead of promises
 
 Promise.all() lets us run multiple promises at the same time and wait for all of them to finish
+
+ASYNC 
+async makes a function return a promise -> short method of writing a promise without resolve 
+
+async function loadPage(){
+    console.log('hello');
+    return 'value1'; //same as resolve('value1');
+}
+
+same as 
+
+function loadPage(){
+    new Promise((resolve)=>{
+        console.log('hello');
+        resolve('value1');
+        });
+ }
+
+AWAIT lets us wait for a promise to finish before we go to next line
+we can only use await when inside an async function
+can only be used with promises not callback
+closest function has to be an async
+we can use await with Promise.all()
+
+async function loadPage(){ 
+    console.log('load page');
+    await loadProductsFetch(); 
+    return 'value1'; 
+}
+
+same as
+
+function loadPage(){
+    new Promise((resolve)=>{
+        console.log('load page');
+        resolve();
+
+    }).then(()=>{
+        return loadProductsFetch();    
+    
+    }).then(()=>{
+        return new Promise((resolve)=>{
+        resolve('value1');     
+    });
+    });
+}
 */
