@@ -98,6 +98,34 @@ console.log(product1);
 */
 
 export let products = [];
+
+export function loadProductsFetch(){//fetch makes an hhtp request fetch uses a Promise to get response which is saved in response parameter
+  //can save fetch in a variable
+  const promise = fetch(
+    'https://supersimplebackend.dev/products'
+  ).then((response)=>{
+     return response.json();//this itself is async and we need a promise to sync, return makes it so it waits for this promise to finish before going to next
+  }).then((productsData)=>{
+    //console.log(productsData);//does json parse by itself
+        products = productsData.map((productDetails)=>{
+          if(productDetails.type === 'clothing'){
+            return new Clothing(productDetails);
+          }
+          return new Product(productDetails);
+      });
+
+      console.log('load products check');
+  });
+
+  return promise;
+}
+
+/*
+loadProductsFetch().then(()=>{
+  console.log('next step');//can add more steps after fetch
+});
+*/
+
 export function loadProducts(funct){
 
   const xhr = new XMLHttpRequest();

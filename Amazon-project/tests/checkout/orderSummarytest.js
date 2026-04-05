@@ -1,5 +1,5 @@
 import {cart, loadFromStorage} from "../../data/cart.js";
-import { loadProducts } from "../../data/products.js";
+import { loadProducts, loadProductsFetch } from "../../data/products.js";
 import { renderOrderSummary } from "../../scripts/checkout/orderSummary.js"
 
 //Integrated testing
@@ -10,7 +10,7 @@ describe('test suite: renderOrderSummary',()=>{//testing how page looks and beha
 
     beforeAll(//done is a parameter provided by jasmine to wait before next step
         (done)=>{
-            loadProducts(()=>{
+            loadProductsFetch().then(()=>{
                 done();//done can be used inside beforeEach and it too
             });
         }

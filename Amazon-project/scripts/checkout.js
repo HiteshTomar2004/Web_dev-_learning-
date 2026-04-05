@@ -1,6 +1,6 @@
 import { renderOrderSummary } from "./checkout/orderSummary.js";
 import { renderPaymentSummary } from "./checkout/paymentSummary.js";
-import { loadProducts } from "../data/products.js";
+import { loadProducts,loadProductsFetch } from "../data/products.js";
 import { loadCart } from "../data/cart.js";
 //import "../data/cart-class.js";
 //import '../data/backend-practice.js'
@@ -10,11 +10,7 @@ import { loadCart } from "../data/cart.js";
 The promise  is same as callback below
 */
 Promise.all([//array of promises
-    new Promise((resolve)=>{
-        loadProducts(()=>{
-        resolve('value1');//any parameter saved inside resolve will be passed onto next then
-    });
-    }),
+    loadProductsFetch(),
     new Promise((resolve)=>{
         loadCart(()=>{
             resolve('value2');  //if nothing undefined is passed in an array of values
