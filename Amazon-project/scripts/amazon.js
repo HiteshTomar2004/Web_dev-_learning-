@@ -1,100 +1,103 @@
 import { addToCart, totalQuantityCalculator } from '../data/cart.js';
-import { products } from '../data/products.js';
+import { products,loadProducts } from '../data/products.js';
 import formatCurrency from './utils/money.js';
 
+loadProducts(renderProductsGrid);//function inside loadProducts is a callback - a function to run in future
 totalQuantityCalculator();
 
-let productsHTML = ``;
+function renderProductsGrid(){
+    let productsHTML = ``;
 
-products.forEach((product) =>{
-    productsHTML = productsHTML + `
-        <div class="product-container">
-            <div class="product-image-container">
-                <img class="product-image"
-                src="${product.image}">
-            </div>
-
-            <div class="product-name limit-text-to-2-lines">
-                ${product.name}
-            </div>
-
-            <div class="product-rating-container">
-                <img class="product-rating-stars"
-                src="${product.getStarsUrl()}">
-                <div class="product-rating-count link-primary">
-                ${product.rating.count}
+    products.forEach((product) =>{
+        productsHTML = productsHTML + `
+            <div class="product-container">
+                <div class="product-image-container">
+                    <img class="product-image"
+                    src="${product.image}">
                 </div>
-            </div>
 
-            <div class="product-price">
-                ${product.getPrice()}
-            </div>
+                <div class="product-name limit-text-to-2-lines">
+                    ${product.name}
+                </div>
 
-            <div class="product-quantity-container">
-                <select class="js-quantity-selector-${product.id}">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                </select>
-            </div>
+                <div class="product-rating-container">
+                    <img class="product-rating-stars"
+                    src="${product.getStarsUrl()}">
+                    <div class="product-rating-count link-primary">
+                    ${product.rating.count}
+                    </div>
+                </div>
 
-            ${product.extraInfoHTML()/*PolyMorphism use a method without knowing the class
-                instead of if statements Class determines what the method does*/}
- 
-            <div class="product-spacer"></div>
+                <div class="product-price">
+                    ${product.getPrice()}
+                </div>
 
-            <div class="added-to-cart js-added-display"
-                data-added-display-id="${product.id}">
-                <img src="images/icons/checkmark.png">
-                Added
-            </div>
+                <div class="product-quantity-container">
+                    <select class="js-quantity-selector-${product.id}">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    </select>
+                </div>
 
-            <button class="add-to-cart-button button-primary
-            js-add-to-cart"
-            data-product-id="${product.id}">
-                Add to Cart
-            </button>
-            </div>
-    `;
-});
+                ${product.extraInfoHTML()/*PolyMorphism use a method without knowing the class
+                    instead of if statements Class determines what the method does*/}
+    
+                <div class="product-spacer"></div>
 
-document.querySelector('.js-products-grid').innerHTML = productsHTML;
+                <div class="added-to-cart js-added-display"
+                    data-added-display-id="${product.id}">
+                    <img src="images/icons/checkmark.png">
+                    Added
+                </div>
 
-const addedMessageTimeouts = {}; 
-
-document.querySelectorAll('.js-add-to-cart')
-    .forEach((button)=>{
-        button.addEventListener('click',()=>{
-            const{productId} = button.dataset;//const productId = button.dataset.productId;//converted from kebab-case to camelCase product-id to productId
-            
-            const quantitySelected = document.querySelector(`.js-quantity-selector-${productId}`).value;//same convert to camel from kebab
-            let quantity = Number(quantitySelected);
-
-            addToCart(productId,quantity);//from cart.js
-            totalQuantityCalculator(); //from cart.js
-            addedMessageTimeouts[productId] = addedCheckmarkDisplay(productId,addedMessageTimeouts[productId]);
-        })
+                <button class="add-to-cart-button button-primary
+                js-add-to-cart"
+                data-product-id="${product.id}">
+                    Add to Cart
+                </button>
+                </div>
+        `;
     });
 
+    document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
-function addedCheckmarkDisplay(productId,currentTimerId){
-    const addedElements = document.querySelector(`[data-added-display-id="${productId}"]`);
+    const addedMessageTimeouts = {}; 
 
-    addedElements.classList.remove('js-added-opacity');//restart animation
-    if(currentTimerId){
-        clearTimeout(currentTimerId);
+    document.querySelectorAll('.js-add-to-cart')
+        .forEach((button)=>{
+            button.addEventListener('click',()=>{
+                const{productId} = button.dataset;//const productId = button.dataset.productId;//converted from kebab-case to camelCase product-id to productId
+                
+                const quantitySelected = document.querySelector(`.js-quantity-selector-${productId}`).value;//same convert to camel from kebab
+                let quantity = Number(quantitySelected);
+
+                addToCart(productId,quantity);//from cart.js
+                totalQuantityCalculator(); //from cart.js
+                addedMessageTimeouts[productId] = addedCheckmarkDisplay(productId,addedMessageTimeouts[productId]);
+            })
+        });
+
+
+    function addedCheckmarkDisplay(productId,currentTimerId){
+        const addedElements = document.querySelector(`[data-added-display-id="${productId}"]`);
+
+        addedElements.classList.remove('js-added-opacity');//restart animation
+        if(currentTimerId){
+            clearTimeout(currentTimerId);
+        }
+        addedElements.classList.add('js-added-opacity');
+
+        const newTimerId = setTimeout(()=>{
+                addedElements.classList.remove('js-added-opacity');
+                },4000); 
+        return newTimerId;
     }
-    addedElements.classList.add('js-added-opacity');
-
-    const newTimerId = setTimeout(()=>{
-            addedElements.classList.remove('js-added-opacity');
-            },4000); 
-    return newTimerId;
 }

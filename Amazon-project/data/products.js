@@ -97,6 +97,31 @@ const product1 = new Product({
 console.log(product1);
 */
 
+export let products = [];
+export function loadProducts(funct){
+
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener('load',()=>{
+    products = JSON.parse(xhr.response).map((productDetails)=>{
+      if(productDetails.type === 'clothing'){
+        return new Clothing(productDetails);
+      }
+      return new Product(productDetails);
+    });
+
+    console.log('load products check');
+
+    funct();
+  });
+
+  xhr.open('GET','https://supersimplebackend.dev/products');
+  xhr.send();
+
+}
+
+
+/*HOW TO LOCALLY RUN A PRODUCTS ARRAY
+
 //map() to put products array elements in a class Product
 export const products = [
   {
@@ -793,3 +818,4 @@ export const products = [
   }
   return new Product(productDetails);
 });
+*/
